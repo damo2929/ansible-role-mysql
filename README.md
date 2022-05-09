@@ -163,6 +163,24 @@ On Ubuntu, the package names are named differently, so the `mysql_package` varia
       - mariadb-client
       - mariadb-server
       - python-mysqldb
+      
+      
+## bidirectional support
+ you need to setup auto increment values to allow bidriectional replication 
+ ```
+ mysql_server_id: "{{ lookup('ansible.utils.index_of', groups['groupname'], 'eq', '{{ inventory_hostname }}')  + 1 |int }}"
+ mysql_auto_increment_increment: "{{ groups['groupname'] | length }}"
+ mysql_auto_increment_offset: "{{ mysql_server_id }}"
+ ```
+ bet replication role to both.
+```
+mysql_replication_role: "both"
+```
+ensure each server you have in the pool has a fqdn.yaml in host_vars with the nameor IP of the master
+```
+mysql_replication_master = ip/hostname
+```
+
 
 ## Dependencies
 
